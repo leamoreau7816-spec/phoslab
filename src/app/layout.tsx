@@ -5,11 +5,11 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Phoslab — Le labo de la lumière",
-  description: "Posez une question. Recevez pas une réponse — recevez la carte du territoire.",
+  title: "Phoslab — The light lab",
+  description: "Ask a question. Don't get an answer — get the map of the territory.",
   openGraph: {
     title: "Phoslab",
-    description: "L'information éclairée. Ce qu'on sait, ce qu'on ne sait pas, et qui dit quoi.",
+    description: "Illuminated information. What we know, what we don't, and who says what.",
     type: "website",
   },
 };
@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
+    <html lang="en">
       <body className={`${inter.className} antialiased`}>{children}</body>
     </html>
   );

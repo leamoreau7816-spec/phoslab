@@ -1,4 +1,5 @@
 import type { AnalysisResult } from "@/app/page";
+import { type Lang, t } from "@/i18n";
 
 function Section({
   icon,
@@ -36,23 +37,25 @@ function SourceBadge({ type }: { type: string }) {
   );
 }
 
-export function KnowledgeCard({ result }: { result: AnalysisResult }) {
+export function KnowledgeCard({ result, lang }: { result: AnalysisResult; lang: Lang }) {
+  const i = t(lang);
+
   return (
     <div className="mt-8 mb-12 max-w-3xl w-full space-y-4">
       {/* Question */}
       <div className="text-center mb-6">
         <h2 className="text-xl font-bold text-white">&ldquo;{result.question}&rdquo;</h2>
         <p className="text-xs text-neutral-500 mt-1">
-          Confiance de l&apos;analyse : {result.confidence} · Dernière MAJ : {result.lastUpdated}
+          {i.confidence} : {result.confidence} · {i.lastUpdated} : {result.lastUpdated}
         </p>
       </div>
 
-      {/* Ce qu'on sait */}
-      <Section icon="📗" title="Ce qu'on sait" color="text-green-400">
+      {/* Known */}
+      <Section icon="📗" title={i.known} color="text-green-400">
         <p className="text-neutral-300 text-sm mb-3">{result.known.summary}</p>
         <ul className="space-y-2">
-          {result.known.points.map((p, i) => (
-            <li key={i} className="text-sm text-neutral-300 flex gap-2">
+          {result.known.points.map((p, idx) => (
+            <li key={idx} className="text-sm text-neutral-300 flex gap-2">
               <span className="text-green-500 mt-0.5">✓</span>
               <span>
                 {p.text}
@@ -67,12 +70,12 @@ export function KnowledgeCard({ result }: { result: AnalysisResult }) {
         </ul>
       </Section>
 
-      {/* Ce qui est débattu */}
-      <Section icon="📙" title="Ce qui est débattu" color="text-amber-400">
+      {/* Debated */}
+      <Section icon="📙" title={i.debated} color="text-amber-400">
         <p className="text-neutral-300 text-sm mb-3">{result.debated.summary}</p>
         <ul className="space-y-2">
-          {result.debated.points.map((p, i) => (
-            <li key={i} className="text-sm text-neutral-300 flex gap-2">
+          {result.debated.points.map((p, idx) => (
+            <li key={idx} className="text-sm text-neutral-300 flex gap-2">
               <span className="text-amber-500 mt-0.5">◐</span>
               <span>
                 {p.text}
@@ -87,12 +90,12 @@ export function KnowledgeCard({ result }: { result: AnalysisResult }) {
         </ul>
       </Section>
 
-      {/* Ce qu'on ne sait pas */}
-      <Section icon="📕" title="Ce qu'on ne sait pas" color="text-red-400">
+      {/* Unknown */}
+      <Section icon="📕" title={i.unknown} color="text-red-400">
         <p className="text-neutral-300 text-sm mb-3">{result.unknown.summary}</p>
         <ul className="space-y-2">
-          {result.unknown.points.map((p, i) => (
-            <li key={i} className="text-sm text-neutral-300 flex gap-2">
+          {result.unknown.points.map((p, idx) => (
+            <li key={idx} className="text-sm text-neutral-300 flex gap-2">
               <span className="text-red-500 mt-0.5">?</span>
               <span>{p.text}</span>
             </li>
@@ -100,11 +103,11 @@ export function KnowledgeCard({ result }: { result: AnalysisResult }) {
         </ul>
       </Section>
 
-      {/* Qui dit quoi */}
-      <Section icon="🗺️" title="Qui dit quoi" color="text-purple-400">
+      {/* Perspectives */}
+      <Section icon="🗺️" title={i.whoSaysWhat} color="text-purple-400">
         <div className="space-y-3">
-          {result.perspectives.map((p, i) => (
-            <div key={i} className="rounded-lg bg-neutral-900 p-3 border border-neutral-800">
+          {result.perspectives.map((p, idx) => (
+            <div key={idx} className="rounded-lg bg-neutral-900 p-3 border border-neutral-800">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-sm font-semibold text-white">{p.actor}</span>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-neutral-800 text-neutral-400">
@@ -112,17 +115,17 @@ export function KnowledgeCard({ result }: { result: AnalysisResult }) {
                 </span>
               </div>
               <p className="text-sm text-neutral-300">{p.position}</p>
-              <p className="text-xs text-neutral-500 mt-1">💰 Intérêt : {p.interest}</p>
+              <p className="text-xs text-neutral-500 mt-1">💰 {i.interest} : {p.interest}</p>
             </div>
           ))}
         </div>
       </Section>
 
-      {/* Sources primaires */}
-      <Section icon="🔗" title="Sources primaires" color="text-blue-400">
+      {/* Sources */}
+      <Section icon="🔗" title={i.primarySources} color="text-blue-400">
         <ul className="space-y-2">
-          {result.sources.map((s, i) => (
-            <li key={i} className="flex items-center gap-2 text-sm">
+          {result.sources.map((s, idx) => (
+            <li key={idx} className="flex items-center gap-2 text-sm">
               <SourceBadge type={s.type} />
               <a
                 href={s.url}
@@ -138,14 +141,13 @@ export function KnowledgeCard({ result }: { result: AnalysisResult }) {
         </ul>
       </Section>
 
-      {/* Transparence */}
+      {/* Transparency */}
       <div className="rounded-xl border border-amber-900/50 bg-amber-950/20 p-4 text-center">
         <p className="text-xs text-amber-300/80">
-          ⚠️ Cette analyse a été générée par une IA. Chaque source citée est vérifiable.
-          L&apos;IA peut se tromper — croisez toujours avec les sources primaires.
+          ⚠️ {i.transparencyWarning}
         </p>
         <button className="mt-2 text-xs text-amber-400 underline hover:text-white transition">
-          Signaler une erreur
+          {i.reportError}
         </button>
       </div>
     </div>

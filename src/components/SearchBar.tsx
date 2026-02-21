@@ -1,26 +1,24 @@
 "use client";
 
 import { useState } from "react";
+import { type Lang, t } from "@/i18n";
 
 export function SearchBar({
   onSearch,
   loading,
+  lang,
 }: {
   onSearch: (q: string) => void;
   loading: boolean;
+  lang: Lang;
 }) {
   const [query, setQuery] = useState("");
+  const i = t(lang);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim() && !loading) onSearch(query.trim());
   };
-
-  const examples = [
-    "Le jeûne intermittent est-il bon pour la santé ?",
-    "Faut-il investir dans l'immobilier en 2026 ?",
-    "Les écrans sont-ils dangereux pour les enfants ?",
-  ];
 
   return (
     <div className="w-full max-w-2xl">
@@ -29,7 +27,7 @@ export function SearchBar({
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Posez votre question..."
+          placeholder={i.placeholder}
           disabled={loading}
           className="w-full px-6 py-4 rounded-2xl bg-[var(--card)] border border-[var(--border)] text-white text-lg placeholder:text-neutral-500 focus:outline-none focus:border-[var(--accent-dim)] focus:ring-1 focus:ring-[var(--accent-dim)] transition disabled:opacity-50"
         />
@@ -38,13 +36,13 @@ export function SearchBar({
           disabled={loading || !query.trim()}
           className="absolute right-3 top-1/2 -translate-y-1/2 px-4 py-2 rounded-xl bg-[var(--accent)] text-black font-semibold text-sm hover:bg-[var(--accent-dim)] transition disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          {loading ? "..." : "Éclairer"}
+          {loading ? i.buttonLoading : i.button}
         </button>
       </form>
 
       {!loading && (
         <div className="mt-4 flex flex-wrap gap-2 justify-center">
-          {examples.map((ex) => (
+          {i.examples.map((ex) => (
             <button
               key={ex}
               onClick={() => {

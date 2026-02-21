@@ -1,10 +1,7 @@
-export function LoadingState() {
-  const steps = [
-    "Recherche de sources fiables...",
-    "Croisement des perspectives...",
-    "Analyse des biais...",
-    "Construction de la carte...",
-  ];
+import { type Lang, t } from "@/i18n";
+
+export function LoadingState({ lang }: { lang: Lang }) {
+  const steps = t(lang).loadingSteps;
 
   return (
     <div className="mt-12 max-w-2xl w-full">
